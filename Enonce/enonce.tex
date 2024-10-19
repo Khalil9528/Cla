@@ -1,0 +1,105 @@
+
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{hyperref}
+
+\title{Projet ClassGen}
+\author{Université Paris-Est Marne-la-Vallée}
+
+\begin{document}
+
+\maketitle
+
+\section{Objectif du projet}
+
+Le but du projet \textbf{ClassGen} est d'écrire une application Web qui interagit avec un LLM pour aider un utilisateur à créer une classe Java valide à partir d'indications en anglais. L'application ClassGen est composée d'un back-end écrit en Java offrant différents services REST permettant de créer, visualiser et compiler/exécuter des classes Java.
+
+\section{Fonctionnalités de l'application}
+
+L'application doit permettre :
+\begin{itemize}
+    \item De créer une nouvelle classe Java à partir d'un prompt utilisateur écrit en anglais. Le prompt utilisateur et votre prompt système sont envoyés à un LLM local (qui tourne sur le serveur) pour créer une classe Java. Cette classe est ensuite compilée. Si des erreurs de compilation surviennent, celles-ci sont résolues automatiquement en demandant au LLM de les corriger. Une fois les erreurs résolues, l'utilisateur voit la discussion complète avec le LLM et la classe résultante. Il peut ensuite, grâce à un nouveau prompt, modifier la classe générée toujours à travers le LLM.
+    \item D'afficher la liste de toutes les sessions de discussion avec un utilisateur. Les discussions sont horodatées (jour/heure) et classées de la plus récente à la plus ancienne. Chaque discussion de la liste doit afficher sa date, le nom du LLM utilisé et le premier prompt sous forme d'un lien. Si l'utilisateur clique sur ce lien, la discussion correspondante s'affiche et l'utilisateur peut continuer cette discussion (dans ce cas, l'horodatage est mis à jour).
+    \item La page affichant la liste des discussions doit aussi avoir un gros bouton ``+'' qui permet de démarrer une nouvelle discussion avec le LLM. Il doit également être possible de choisir le LLM avec lequel on va avoir une discussion plutôt que d'utiliser le LLM configuré par défaut.
+    \item Une page doit permettre de choisir le LLM courant que l'on veut utiliser parmi une liste de 3 LLMs. Pour chaque LLM, on doit avoir ses différentes caractéristiques.
+\end{itemize}
+
+\section{Interface graphique}
+
+Votre application doit comporter trois écrans :
+\begin{itemize}
+    \item La première page sert d'écran d'accueil et affiche la liste des discussions ainsi que le bouton ``+''.
+    \item Une page de discussion qui affiche une alternance de questions (prompts) et de réponses.
+    \item Une page de sélection du LLM par défaut.
+\end{itemize}
+
+\section{Technologies à utiliser}
+
+\begin{itemize}
+    \item Vous devez utiliser \textbf{Maven} comme outil de build et \textbf{IntelliJ} comme IDE, ainsi que Java 23.
+    \item Les tests unitaires doivent être réalisés avec \textbf{JUnit 5.11.0}. Chaque classe Java doit avoir une classe de test correspondante pour au moins 80\% du projet.
+    \item Pour la sérialisation/désérialisation JSON des requêtes, utilisez l'API \textbf{Jackson 2.17.2}.
+    \item Pour interagir avec des LLMs locaux, utilisez la bibliothèque \textbf{LangChain4J 0.34.0}.
+\end{itemize}
+
+\section{Implémentation des services REST}
+
+Votre application doit utiliser l'une des technologies suivantes pour les services REST :
+\begin{itemize}
+    \item Spring Boot 3.3.3
+    \item Quarkus 3.14.2
+    \item Micronaut 4.6.1
+    \item Helidon 4.1.1 SE ou MP
+\end{itemize}
+
+\section{Base de données}
+
+L'application a besoin d'une base de données, mais une base de données ``embedded'' suffira. Utilisez l'une des technologies suivantes :
+\begin{itemize}
+    \item \textbf{Sqlite JDBC 3.46.1.0}
+    \item \textbf{H2 Database 2.3.232}
+    \item \textbf{HyperSQL 2.7.3}
+    \item \textbf{Apache Derby 10.17.1.0}
+\end{itemize}
+
+\section{Front-end Web}
+
+Pour le front-end, vous devez utiliser l'un des frameworks suivants :
+\begin{itemize}
+    \item Vue.js 3.5.3
+    \item Svelte 4.2.19
+    \item Solid.js 1.8.22
+    \item React.js 18.3.1
+    \item Angular 18.2.3
+\end{itemize}
+
+Pour améliorer la partie CSS, vous pouvez utiliser l'une des bibliothèques suivantes :
+\begin{itemize}
+    \item Bootstrap 5.3.3
+    \item Tailwind CSS 3.4.10
+    \item Bulma CSS 1.0.2
+    \item MUI 6.0.2
+    \item NextUI 2.4.6
+    \item React-UI 0.56.0
+\end{itemize}
+
+\section{Sécurité}
+
+\begin{itemize}
+    \item Les entrées des services web doivent être validées et les sorties doivent être sécurisées pour éviter les injections de code.
+    \item Il n'est pas demandé d'identifier les utilisateurs.
+    \item Vous ne devez pas utiliser de requêtes CORS.
+\end{itemize}
+
+\section{Documentation de l'API REST}
+
+Vous devez documenter votre API REST en utilisant le format Open API 3. Utilisez une des bibliothèques suivantes :
+\begin{itemize}
+    \item Springdoc OpenAPI
+    \item Quarkus - OpenAPI
+    \item Micronaut - OpenAPI
+    \item Helidon SE - OpenAPI
+    \item Helidon MP - OpenAPI
+\end{itemize}
+
+\end{document}
