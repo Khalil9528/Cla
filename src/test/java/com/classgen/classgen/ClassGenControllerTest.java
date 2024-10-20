@@ -1,9 +1,7 @@
 package com.classgen.classgen;
 
-
-import org.junit.jupiter.api.Test;
 import com.classgen.classgen.service.LLMService;
-import org.mockito.Mock;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -15,7 +13,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -53,21 +50,4 @@ public class ClassGenControllerTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string("Code generation failed."));
     }
-
-    @Test
-    public void testGenerateClass() {
-        // Créer le prompt
-        String prompt = "Create a Java class representing a Car with attributes make, model, and year";
-
-        // Appeler le service pour générer la classe
-        String generatedClass = llmService.generateCode(prompt);
-
-        // Classe Java attendue
-        String expectedClass = "public class Car { private String make; private String model; private int year; }";
-
-        // Vérifier que la classe générée est correcte
-        //assertEquals(expectedClass, generatedClass.trim());
-    }
-
-
 }
