@@ -1,43 +1,45 @@
 package com.classgen.classgen;
 
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.server.LocalServerPort;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.anyString;
+import com.classgen.classgen.service.LLMService;
 
-@SpringBootTest(classes = ClassgenApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class ClassGenIntegrationTest {
 
-    @LocalServerPort
-    private int port;
-
     @Autowired
-    private RestTemplate restTemplate;
+    private TestRestTemplate restTemplate;
+
+    // Mock le service LLM
+    @MockBean
+    private LLMService llmService;
 
     @Test
-    public void testGenerateClassFromPrompt() {
-        String prompt = "Create a Java class named Car with attributes make, model, and year.";
+    public void testGenerateClass_Success() {
+        // Simule la réponse du LLMService
+        Mockito.when(llmService.generateCode(anyString())).thenReturn("public class Car {}");
 
-        String url = "http://localhost:" + port + "/api/generateClass";
+        // Envoie la requête avec le prompt
+        String url = "/api/generateClass"; // le port est automatiquement injecté par @SpringBootTest
 
         HttpHeaders headers = new HttpHeaders();
-        headers.set("Content-Type", "application/json");
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        String requestJson = "{\"prompt\":\"Create a class named Car\"}";
 
-        String requestJson = "{\"prompt\":\"" + prompt + "\"}";
         HttpEntity<String> entity = new HttpEntity<>(requestJson, headers);
+        ResponseEntity<String> response = restTemplate.postForEntity(url, entity, String.class);
 
-        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.POST, entity, String.class);
-
+        // Vérifie que la réponse contient la classe Car
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(response.getBody()).contains("public class Car");
     }
-
 }
