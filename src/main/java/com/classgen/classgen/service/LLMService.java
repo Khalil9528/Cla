@@ -6,7 +6,7 @@ import org.springframework.web.client.RestTemplate;
 
 @Service
 public class LLMService {
-    private final String LLM_API_URL = "https://api.example.com/generate"; // Remplace par l'URL de l'API LLM
+    private final String LLM_API_URL = "https://api.example.com/generate";
     private final RestTemplate restTemplate;
 
     public LLMService(RestTemplate restTemplate) {
