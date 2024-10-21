@@ -1,4 +1,4 @@
-package com.classgen.classgen.service;
+package com.classgen.classgen.model;
 
 public class LLMResponse {
     private String generatedCode;

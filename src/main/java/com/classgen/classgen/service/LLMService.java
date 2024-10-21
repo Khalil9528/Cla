@@ -1,29 +1,37 @@
 package com.classgen.classgen.service;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import java.util.Map;
+import java.util.HashMap;
 
 @Service
 public class LLMService {
 
-    private final String LLM_API_URL = "http://localhost:8080/generate"; // URL correcte ?
     private final RestTemplate restTemplate;
+
+    @Value("${ollama.api.url}")
+    private String ollamaApiUrl;
 
     public LLMService(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
     }
 
     public String generateCode(String prompt) {
-        LLMRequest request = new LLMRequest(prompt);
-        try {
-            System.out.println("Sending request to LLM API: " + LLM_API_URL);
-            LLMResponse response = restTemplate.postForObject(LLM_API_URL, request, LLMResponse.class);
-            System.out.println("Received response from LLM API: " + response);
-            return response != null ? response.getGeneratedCode() : "Error during code generation";
-        } catch (Exception e) {
-            System.err.println("Error during API call: " + e.getMessage());
-            return "Error during code generation" + e;
-        }
-    }
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
 
+        Map<String, Object> requestBody = new HashMap<>();
+        requestBody.put("model", "llama2"); // Spécifie ici le modèle Ollama
+        requestBody.put("prompt", prompt);
+
+        HttpEntity<Map<String, Object>> entity = new HttpEntity<>(requestBody, headers);
+
+        String response = restTemplate.postForObject(ollamaApiUrl, entity, String.class);
+        return response != null ? response : "Erreur lors de la génération du code.";
+    }
 }
