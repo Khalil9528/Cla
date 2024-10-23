@@ -5,19 +5,11 @@ import jakarta.persistence.Id;
 import java.time.LocalDateTime;
 import java.util.UUID;
 import jakarta.persistence.PrePersist;
+import jakarta.persistence.*;
 
 @Entity
 public class ChatMessage {
 
-    /*
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-
-    private String prompt;
-    private String response;
-    private LocalDateTime timestamp;
-*/
     @Id
     private UUID id;
 
@@ -25,16 +17,14 @@ public class ChatMessage {
     private String response;
     private LocalDateTime timestamp;
 
-    /*@PrePersist
+    @PrePersist
     public void prePersist() {
         if (id == null) {
             id = UUID.randomUUID();
         }
-    }*/
-    @PrePersist
-    protected void onCreate() {
-        id = UUID.randomUUID();
-        this.timestamp = LocalDateTime.now();
+        if (timestamp == null) {
+            timestamp = LocalDateTime.now();
+        }
     }
 
     public ChatMessage() {  }
@@ -45,7 +35,6 @@ public class ChatMessage {
         this.timestamp = timestamp;
     }
 
-    // Getters et setters
     public UUID getId() {
         return id;
     }
